@@ -1,0 +1,39 @@
+{
+    "game": "7wonders_v0",
+    "expansions":[],
+    "players":[
+{
+    "playerName": "fullRules",
+    "militaryVP": 4,
+    "gold": 14,
+    "goldVP": 4,
+    "wonderVP": 10,
+    "civilianVP": 13,
+    "scienceGears": 1,
+    "scienceMeasurement": 3,
+    "scienceTablet":2,
+    "scienceIdenticalVP": 14,
+    "scienceSetVP": 7,
+    "commercialVP": 4,
+    "guildVP": 0,
+    "totalVP": 56
+},
+{
+    "playerName": "quickRules",
+    "militaryVP": 0,
+    "gold": 0,
+    "goldVP": 0,
+    "wonderVP": 0,
+    "civilianVP": 0,
+    "wonderVP": 0,
+    "scienceGears": 1,
+    "scienceMeasurement": 3,
+    "scienceTablet": 2,
+    "scienceIdenticalVP": 7,
+    "scienceSetVP": 14,
+    "commercialVP": 0,
+    "guildVP": 0,
+    "totalVP": 21
+}
+]
+}
