@@ -9,6 +9,20 @@ exports.score = function(data) {
         return totalVP;
     }
 
+    calculateWinnerHighScore = function(data) {
+        highest = null;
+        
+        for (var idx in data["players"]) {
+            var current = data["players"][idx];
+            if (highest == null || current["totalVP"] > highest["totalVP"]) {
+                highest = current;
+            }
+        }
+        
+        data["winner"]=highest["playerName"];
+        data["winnerVP"]=highest["totalVP"];
+    }
+    
     scorePlayer = function(player) {
         //  Calculate gold
         player["goldVP"] = Math.floor(player["gold"] / 3);
@@ -22,10 +36,16 @@ exports.score = function(data) {
         var totalVP = sum(player, ["militaryVP", "goldVP", "wonderVP", "civilianVP", "scienceIdenticalVP", "scienceSetVP", "commercialVP", "guildVP"]);
 
         player["totalVP"]= totalVP;
+        
     }
 
     for (var idx in data["players"]) {
+        if (data["players"][idx]["playerName"]==undefined) {
+            data["players"][idx]["playerName"]="Player "+(idx+1);
+        }
         scorePlayer(data["players"][idx]);
     }
+    
+    calculateWinnerHighScore(data);
     return data;
 }
