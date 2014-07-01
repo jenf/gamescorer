@@ -20,10 +20,15 @@ GameCommon.prototype.calculateScoreFromVP = function(player, items) {
     var totalVP = 0;
     for (var item in items) {
         totalVP += player[items[item]];
+        //console.log(items[item]+" "+player[items[item]]+" "+totalVP);
     }
     
     player["totalVP"]= totalVP;
+    
     return totalVP;
+}
+
+GameCommon.prototype.showScore = function(data) {
 }
 
 exports.GameCommon = GameCommon;
