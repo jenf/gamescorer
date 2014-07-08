@@ -1,69 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css" />
-
+<link rel="stylesheet" href="theme.css" />
 
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
 <!--  for some reason this needs to go last... -->
 <script data-main="gamescorer" src="require.js"></script>
+
 <script>
-
-var json={
-    "game": "7wonders_v0",
-    "expansions":[],
-    "players":[
-{
-    "playerName": "fullRules",
-    "militaryVP": 4,
-    "gold": 14,
-    "wonderVP": 10,
-    "civilianVP": 13,
-    "scienceGears": 1,
-    "scienceMeasurement": 3,
-    "scienceTablet":2,
-    "commercialVP": 4,
-    "guildVP": 0
-},
-{
-    "playerName": "quickRules",
-    "militaryVP": 0,
-    "gold": 0,
-    "wonderVP": 0,
-    "civilianVP": 0,
-    "wonderVP": 0,
-    "scienceGears": 1,
-    "scienceMeasurement": 3,
-    "scienceTablet": 2,
-    "commercialVP": 0,
-    "guildVP": 0
-}
-]
-}
-
 require(["gamescorer"], function(gamescorer) {
 	var scorer = new gamescorer();
 	
-	var game = scorer.getScorer(json["game"]);
+
 	
-	dataout = game.score(json);
-	
-	game.showScore(dataout);
-	console.log(dataout);
+	$.getJSON( "7wonders_in.json", function( data ) {
+		var game = scorer.getScorer(data["game"]);
+		dataout = game.score(data);
+		game.showScore(dataout);
+	});
+
 });
 
 </script>
 <title>GameScorer</title>
 </head>
 <body>
-At present this only shows preinserted data, data input is to be done!
 
-<div id="finalScore">
-Final score goes here!
+
+<div data-role="page" id="finalScore">
+<h1 data-role="header">
+Calculating score, one second...</h1>
+
+<h1 data-role="footer">
+At present this only shows preinserted data, data input is to be done!
+</h1>
 </div>
+
 
 </body>
 </html>

@@ -8,7 +8,6 @@ define("GameCommon", function () {
 	    scores = data["players"].slice(0);
 	    
 	    scores.sort (function (a,b) {
-	    	console.log("eek?" + a);
 	    	a["totalVP"] - b["totalVP"];
 	    });
 	    

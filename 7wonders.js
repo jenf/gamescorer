@@ -18,7 +18,7 @@ define("7wonders", ["require","GameCommon"], function (require, GameCommon) {
 		}
 	
 	var vpFields = ["militaryVP", "goldVP", "wonderVP", "civilianVP", "scienceIdenticalVP", "scienceSetVP", "commercialVP", "guildVP"]; 
-	var otherFields = ["gold","scienceGears", "scienceTablet", "scienceMeasurement"];
+
 	
 	SevenWonders.prototype.scorePlayer = function(player) {
 	    //  Calculate gold
@@ -36,7 +36,6 @@ define("7wonders", ["require","GameCommon"], function (require, GameCommon) {
 	}
 	
 	SevenWonders.prototype.score = function(data) {
-	    console.log("7 wonders!");
 	       
 	    for (var idx in data["players"]) {
 	        if (data["players"][idx]["playerName"]==undefined) {
@@ -53,35 +52,62 @@ define("7wonders", ["require","GameCommon"], function (require, GameCommon) {
 	SevenWonders.prototype.showScore = function(data) {
 		/* I'm unsure if this should be seperated ala MVC... Will develop and see if it needs refactoring */
 		
+		var displayFields = ["scienceGears", "scienceTablet", "scienceMeasurement", "scienceIdenticalVP", "scienceSetVP",
+		                     "gold","goldVP",
+		                     "wonderVP", "civilianVP", "commercialVP", "guildVP"];
+		
+		fields = "";
+		for (x in displayFields) {
+			var item = displayFields[x];
+			var text = english[item];
+			
+			if (vpFields.indexOf(item) == -1) {
+				text = "<i>"+text+"</i>"
+			}
+			fields += "<th>"+text+"</th>";
+		}
 		/* Summary screen show the winners by points */
 		
-		$("#finalScore").html("<h1>7 Wonders</h1>" +
-				"<table><thead><tr><th>Player</th><th>Ranking</th><th>Score</th></tr></thead>" +
+		$("#finalScore").html('<h1 data-role="header">7 Wonders - Results</h1>' +
+				// How to get the BGG images sensisbly, is this okay from their TOS?
+				'<table class="overview"><tr><td rowspan="4"><img src="http://cf.geekdo-images.com/images/pic860217_t.jpg" /></td>'+
+				'<th>Game</th><td><a href="http://boardgamegeek.com/boardgame/68448/7-wonders">7 Wonders</a></td></tr>'+
+				'<tr><th>Expansions</th><td>None</td></tr>'+
+				'<tr><th>Players</th><td>'+data["players"].length+'</td></tr>'+
+				'<tr><th>Winner</th><td>'+data["winner"]+' ('+data["winnerVP"]+'VP)</td></tr>'+
+				'</table>'+
+				'<table data-role="table" data-column-btn-theme="b" data-column-popup-theme="a" data-mode="columntoggle" class="table-stroke"><thead>' +
+				'<tr class="th-groups"><td></td>'+
+				'<th colspan="2" data-priority="1" class="totals">Ranking</th>'+
+				'<th colspan="5" data-priority="2">Science</th>'+
+				'<th colspan="2" data-priority="3">Gold</th>'+
+				'<th colspan="4" data-priority="4">Other</th></tr>'+
+				'<tr><th>Player</th><th>Rank</th><th>Total VP</th>' + fields +"</tr></thead>"+
 				"<tbody id='summary'></tbody></table>");
 		
+
 		for (var idx in data["players"]) {
 			var player = data["players"][idx];
 			
-			full_details = "";
+			full_details = "<th>"+player["playerName"]+"</th><td>"+player["rank"]+"</td>" +
+			"<td>"+player["totalVP"]+"</td>";
 			
-			var fields = vpFields.concat(otherFields);
-			for (x in fields) {
-				var item = fields[x];
-				var text = english[item];
+			for (x in displayFields) {
+				var item = displayFields[x];
+				var text = player[item];
 				
 				if (vpFields.indexOf(item) == -1) {
 					text = "<i>"+text+"</i>"
 				}
 					
-				full_details += "<tr><td>"+text+"</td><td>"+player[item]+"</td>";
+				full_details += "<td>"+text+"</td>";
 			}
 			
-			$("#summary").append("<tr><td>"+player["playerName"]+"</td><td>"+player["rank"]+"</td>" +
-					"<td><div data-role='collapsible'><h3>"+player["totalVP"]+"</h3><p><table>"+full_details+"</table></p></div></td></tr>");
+			$("#summary").append("<tr>"+full_details+"</tr>");
 		}
 		
 		// Kick jquery mobile to create the relevant magic.
-		$("#summary").trigger("create");
+		$("#finalScore").trigger("create");
 		
 	};
 	
