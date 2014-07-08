@@ -11,5 +11,31 @@ define("gamescorer", ["require", "7wonders"], function (require, SevenWonders) {
 	    return new game();
 	}
 	
+	GameScorer.prototype.chooseGameUI = function(data) {
+		
+		// The data will disappear soon
+		var so = this;
+		
+		$("#chooseGame").html("");
+		
+		for (var idx in games) {
+			console.log(idx);
+			var newElem = $('<button class="chooseGame ui-btn ui-corner-all">'+games[idx].prototype.name+'</button>');
+			newElem.data("idx",idx);
+			$("#chooseGame").append(newElem);
+
+		}
+		$(".chooseGame").click(function(e) {
+			
+			
+			console.log($(this).data("idx"));
+			var game = so.getScorer($(this).data("idx"));
+			console.log(game);
+			
+			dataout = game.score(data);
+			game.showScore(dataout);
+		});
+	}
+	
 	return GameScorer;
 });

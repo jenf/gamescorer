@@ -19,6 +19,8 @@ define("7wonders", ["require","GameCommon"], function (require, GameCommon) {
 	
 	var vpFields = ["militaryVP", "goldVP", "wonderVP", "civilianVP", "scienceIdenticalVP", "scienceSetVP", "commercialVP", "guildVP"]; 
 
+	SevenWonders.prototype.name = "7 wonders";
+	SevenWonders.prototype.json_name = "7wonders_v0";
 	
 	SevenWonders.prototype.scorePlayer = function(player) {
 	    //  Calculate gold
@@ -68,7 +70,9 @@ define("7wonders", ["require","GameCommon"], function (require, GameCommon) {
 		}
 		/* Summary screen show the winners by points */
 		
-		$("#finalScore").html('<h1 data-role="header">7 Wonders - Results</h1>' +
+		$.mobile.pageContainer.append('<div data-role="page" id="SevenWondersScore">');
+		
+		$("#SevenWondersScore").html('<h1 data-role="header">7 Wonders - Results</h1>' +
 				// How to get the BGG images sensisbly, is this okay from their TOS?
 				'<table class="overview"><tr><td rowspan="4"><img src="http://cf.geekdo-images.com/images/pic860217_t.jpg" /></td>'+
 				'<th>Game</th><td><a href="http://boardgamegeek.com/boardgame/68448/7-wonders">7 Wonders</a></td></tr>'+
@@ -107,7 +111,8 @@ define("7wonders", ["require","GameCommon"], function (require, GameCommon) {
 		}
 		
 		// Kick jquery mobile to create the relevant magic.
-		$("#finalScore").trigger("create");
+		$("#SevenWondersScore").trigger("create");
+		$.mobile.changePage("#SevenWondersScore");
 		
 	};
 	

@@ -19,8 +19,9 @@ require(["gamescorer"], function(gamescorer) {
 	
 	$.getJSON( "7wonders_in.json", function( data ) {
 		var game = scorer.getScorer(data["game"]);
-		dataout = game.score(data);
-		game.showScore(dataout);
+		//dataout = game.score(data);
+		//game.showScore(dataout);
+		scorer.chooseGameUI(data);
 	});
 
 });
@@ -31,7 +32,7 @@ require(["gamescorer"], function(gamescorer) {
 <body>
 
 
-<div data-role="page" id="finalScore">
+<div data-role="page" id="chooseGame">
 <h1 data-role="header">
 Calculating score, one second...</h1>
 
