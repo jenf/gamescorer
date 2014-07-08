@@ -3,6 +3,23 @@ define("7wonders", ["require","GameCommon"], function (require, GameCommon) {
 	function SevenWonders() {}
 	SevenWonders.prototype = new GameCommon(); 
 	
+	var english = {"militaryVP":"VP from Military",
+			"goldVP":"VP from Gold",
+			"wonderVP": "VP from wonders",
+			"civilianVP": "VP from civic buildings",
+			"scienceIdenticalVP": "VP from identical Science buildings",
+			"scienceSetVP": "VP from set of Science buildings",
+			"commercialVP": "VP from commercial buildings",
+			"guildVP": "VP from guild buildings",
+			"gold":"Total Gold",
+			"scienceGears":"Buildings with gears",
+			"scienceTablet":"Buildings with tablets",
+			"scienceMeasurement":"Buildings with measurements"
+		}
+	
+	var vpFields = ["militaryVP", "goldVP", "wonderVP", "civilianVP", "scienceIdenticalVP", "scienceSetVP", "commercialVP", "guildVP"]; 
+	var otherFields = ["gold","scienceGears", "scienceTablet", "scienceMeasurement"];
+	
 	SevenWonders.prototype.scorePlayer = function(player) {
 	    //  Calculate gold
 	    player["goldVP"] = Math.floor(player["gold"] / 3);
@@ -13,7 +30,7 @@ define("7wonders", ["require","GameCommon"], function (require, GameCommon) {
 	    // Science sets
 	    player["scienceSetVP"] = Math.min(player["scienceGears"], player["scienceTablet"], player["scienceMeasurement"])*7;
 	    
-	    this.calculateScoreFromVP(player, ["militaryVP", "goldVP", "wonderVP", "civilianVP", "scienceIdenticalVP", "scienceSetVP", "commercialVP", "guildVP"]);
+	    this.calculateScoreFromVP(player, vpFields);
 	
 	
 	}
@@ -44,9 +61,28 @@ define("7wonders", ["require","GameCommon"], function (require, GameCommon) {
 		
 		for (var idx in data["players"]) {
 			var player = data["players"][idx];
-			$("#summary").append("<tr><td>"+player["playerName"]+"</td><td>"+player["rank"]+"</td><td>"+player["totalVP"]+"</td></tr>");
+			
+			full_details = "";
+			
+			var fields = vpFields.concat(otherFields);
+			for (x in fields) {
+				var item = fields[x];
+				var text = english[item];
+				
+				if (vpFields.indexOf(item) == -1) {
+					text = "<i>"+text+"</i>"
+				}
+					
+				full_details += "<tr><td>"+text+"</td><td>"+player[item]+"</td>";
+			}
+			
+			$("#summary").append("<tr><td>"+player["playerName"]+"</td><td>"+player["rank"]+"</td>" +
+					"<td><div data-role='collapsible'><h3>"+player["totalVP"]+"</h3><p><table>"+full_details+"</table></p></div></td></tr>");
 		}
-		[{"Total VP":"totalVP"}]
+		
+		// Kick jquery mobile to create the relevant magic.
+		$("#summary").trigger("create");
+		
 	};
 	
 	return SevenWonders;
