@@ -1,38 +1,18 @@
+define("gamescorer", ["require", "7wonders"], function (require, SevenWonders) {
 
-function GameCommon() {}
-
-GameCommon.prototype.calculateWinnerHighScore = function(data) {
-    highest = null;
-    
-    for (var idx in data["players"]) {
-        var current = data["players"][idx];
-        if (highest == null || current["totalVP"] > highest["totalVP"]) {
-            highest = current;
-        }
-    }
-    
-    data["winner"]=highest["playerName"];
-    data["winnerVP"]=highest["totalVP"];
-    return highest;
-}
-
-GameCommon.prototype.calculateScoreFromVP = function(player, items) {
-    var totalVP = 0;
-    for (var item in items) {
-        totalVP += player[items[item]];
-    }
-    
-    player["totalVP"]= totalVP;
-    return totalVP;
-}
-
-SevenWonders = require("./7wonders.js");
-var games = {"7wonders_v0":SevenWonders.SevenWonders};
-
-exports.score = function(data) {
-    console.log("Scorer running for game: "+data["game"]);
-    var game = games[data['game']];
-    
-    scorer = new game();
-    return scorer.score(data);
-}
+	var games = {"7wonders_v0":SevenWonders};
+	
+	function GameScorer() {};
+	
+	GameScorer.prototype.score = function(data) {
+	    console.log("Scorer running for game: "+data["game"]);
+	    var game = games[data['game']];
+	    
+	    scorer = new game();
+	    
+	    console.log(scorer);
+	    return scorer.score(data);
+	}
+	
+	return GameScorer;
+});
