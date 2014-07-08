@@ -2,9 +2,10 @@
 <html>
 <head>
 <script data-main="gamescorer" src="require.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script>
 
-var data={
+var json={
     "game": "7wonders_v0",
     "expansions":[],
     "players":[
@@ -39,15 +40,22 @@ var data={
 require(["gamescorer"], function(gamescorer) {
 	var scorer = new gamescorer();
 	
-	out = scorer.score(data);
+	var game = scorer.getScorer(json["game"]);
 	
-	console.log(out);
+	dataout = game.score(json);
+	
+	game.showScore(dataout);
+	console.log(dataout);
 });
 
 </script>
 <title>GameScorer</title>
 </head>
 <body>
-Welcome to the game scorer, an app about scoring games and those that love them!
+At present this only shows preinserted data, data input is to be done!
+
+<div id="finalScore">
+Final score goes here!
+</div>
 </body>
 </html>

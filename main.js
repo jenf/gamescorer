@@ -15,18 +15,20 @@ requirejs(["gamescorer"], function(gamescorer) {
 
 	scorer = new gamescorer()
 	
+	
 	data = fs.readFileSync(process.argv[2], "utf8");
 	
 	console.log(data);
 	json = JSON.parse(data);
 	
 	
+	var game = scorer.getScorer(json["game"]);
 	
-	dataout = scorer.score(json);
+	dataout = game.score(json);
 	
 	console.log(JSON.stringify(dataout, null, " "));
 	
-	dataout = fs.readFileSync(process.argv[3],"utf8");
-	jsonout = JSON.parse(dataout);
+	//dataout = fs.readFileSync(process.argv[3],"utf8");
+	//jsonout = JSON.parse(dataout);
 
 });

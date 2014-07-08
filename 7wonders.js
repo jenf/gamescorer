@@ -33,6 +33,22 @@ define("7wonders", ["require","GameCommon"], function (require, GameCommon) {
 	    return data;
 	}
 	
+	SevenWonders.prototype.showScore = function(data) {
+		/* I'm unsure if this should be seperated ala MVC... Will develop and see if it needs refactoring */
+		
+		/* Summary screen show the winners by points */
+		
+		$("#finalScore").html("<h1>7 Wonders</h1>" +
+				"<table><thead><tr><th>Player</th><th>Ranking</th><th>Score</th></tr></thead>" +
+				"<tbody id='summary'></tbody></table>");
+		
+		for (var idx in data["players"]) {
+			var player = data["players"][idx];
+			$("#summary").append("<tr><td>"+player["playerName"]+"</td><td>"+player["rank"]+"</td><td>"+player["totalVP"]+"</td></tr>");
+		}
+		[{"Total VP":"totalVP"}]
+	};
+	
 	return SevenWonders;
 	
 });

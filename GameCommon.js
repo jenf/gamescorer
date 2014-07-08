@@ -5,16 +5,22 @@ define("GameCommon", function () {
 	GameCommon.prototype.calculateWinnerHighScore = function(data) {
 	    highest = null;
 	    
-	    for (var idx in data["players"]) {
-	        var current = data["players"][idx];
-	        if (highest == null || current["totalVP"] > highest["totalVP"]) {
-	            highest = current;
-	        }
-	    }
+	    console.log(data);
+	    scores = data["players"].slice(0);
 	    
-	    data["winner"]=highest["playerName"];
-	    data["winnerVP"]=highest["totalVP"];
-	    return highest;
+	    scores.sort (function (a,b) {
+	    	console.log("eek?" + a);
+	    	a["totalVP"] - b["totalVP"];
+	    });
+	    
+	    console.log("Awwoga" + scores[0]);
+	    data["winner"]=scores[0]["playerName"];
+	    data["winnerVP"]=scores[0]["totalVP"];
+	    
+	    for (var idx in scores) {
+	    	scores[idx]["rank"]=1 + +idx; // Start at 1... somehow idx is a string...
+	    }	    
+
 	}
 	
 	GameCommon.prototype.calculateScoreFromVP = function(player, items) {

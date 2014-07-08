@@ -4,14 +4,11 @@ define("gamescorer", ["require", "7wonders"], function (require, SevenWonders) {
 	
 	function GameScorer() {};
 	
-	GameScorer.prototype.score = function(data) {
-	    console.log("Scorer running for game: "+data["game"]);
-	    var game = games[data['game']];
-	    
-	    scorer = new game();
-	    
-	    console.log(scorer);
-	    return scorer.score(data);
+	GameScorer.prototype.getScorer = function(scorer) {
+
+	    var game = games[scorer];
+	    console.log("Scorer loaded for game: "+scorer+" "+game);   
+	    return new game();
 	}
 	
 	return GameScorer;
