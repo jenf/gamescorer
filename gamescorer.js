@@ -31,8 +31,10 @@ define("gamescorer", ["require", "7wonders"], function (require, SevenWonders) {
 			console.log($(this).data("idx"));
 			var game = so.getScorer($(this).data("idx"));
 			console.log(game);
+			game.setData(data);
+			//game.askPlayers();
 			
-			dataout = game.score(data);
+			dataout = game.score();
 			game.showScore(dataout);
 		});
 	}

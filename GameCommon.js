@@ -20,6 +20,9 @@ define("GameCommon", function () {
 
 	}
 	
+	GameCommon.prototype.setData = function(data) {
+		this.data = data;
+	}
 	GameCommon.prototype.calculateScoreFromVP = function(player, items) {
 	    var totalVP = 0;
 	    for (var item in items) {

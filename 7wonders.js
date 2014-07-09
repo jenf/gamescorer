@@ -1,6 +1,9 @@
 define("7wonders", ["require","GameCommon"], function (require, GameCommon) {
 
-	function SevenWonders() {}
+	function SevenWonders() {
+		this.data = {"game":this.json_name};
+	}
+	
 	SevenWonders.prototype = new GameCommon(); 
 	
 	var english = {"militaryVP":"VP from Military",
@@ -37,8 +40,11 @@ define("7wonders", ["require","GameCommon"], function (require, GameCommon) {
 	
 	}
 	
-	SevenWonders.prototype.score = function(data) {
-	       
+	SevenWonders.prototype.score = function() {
+	    var data = this.data;
+	    
+	    console.log(this.data);
+	    
 	    for (var idx in data["players"]) {
 	        if (data["players"][idx]["playerName"]==undefined) {
 	            data["players"][idx]["playerName"]="Player "+(idx+1);
@@ -49,6 +55,19 @@ define("7wonders", ["require","GameCommon"], function (require, GameCommon) {
 	    
 	    this.calculateWinnerHighScore(data);
 	    return data;
+	}
+	
+	SevenWonders.prototype.askPlayers = function(data) {
+		$.mobile.pageContainer.append('<div data-role="page" id="SevenWondersScore_players"></div>');
+		$("#SevenWondersScore_players").html('<label for="text-1">Player 1:</label>'+
+			'<input name="text-1" id="text-1" value="" type="text">'+
+			'<div data-role="controlgroup" data-type="horizontal" data-mini="true">'+
+			'<a href="#" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-plus ui-btn-b">Add</a>'+
+		    '<a href="#" class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-delete ui-btn-b">Remove</a></div>');
+		
+		// Kick jquery mobile to create the relevant magic.
+		$("#SevenWondersScore_players").trigger("create");
+		$.mobile.changePage("#SevenWondersScore_players");
 	}
 	
 	SevenWonders.prototype.showScore = function(data) {

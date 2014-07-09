@@ -21,9 +21,6 @@ require(["gamescorer"], function(gamescorer) {
 
 	
 	$.getJSON( "7wonders_in.json", function( data ) {
-		var game = scorer.getScorer(data["game"]);
-		//dataout = game.score(data);
-		//game.showScore(dataout);
 		scorer.chooseGameUI(data);
 	});
 
