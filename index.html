@@ -12,6 +12,9 @@
 <script data-main="gamescorer" src="require.js"></script>
 
 <script>
+// See http://stackoverflow.com/questions/11907944/closing-jquery-mobile-new-popup-cause-page-to-refresh-uselessly
+$.mobile.popup.prototype.options.history = false;
+
 require(["gamescorer"], function(gamescorer) {
 	var scorer = new gamescorer();
 	
