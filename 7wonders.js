@@ -24,6 +24,45 @@ define("7wonders", ["require","GameCommon"], function (require, GameCommon) {
 
 	SevenWonders.prototype.name = "7 wonders";
 	SevenWonders.prototype.json_name = "7wonders_v0";
+	SevenWonders.prototype.questions_start = "militaryVP";
+	SevenWonders.prototype.questions =
+	{"militaryVP" : {
+	    /* title: if you want to not use the english text */
+	    "description":"VP from Conflict tokens",
+	    "method":"number",
+	    "next":"gold"},
+	 "gold": {
+	     "description":"Gold from each players treasury",
+	     "method":"number",
+	     "next":"wonderVP"},
+	 "wonderVP": {
+	     "description":"VP from constructed Wonders",
+	     "method":"number",
+	     "next":"civilianVP"},
+	 "civilianVP": {
+	     "description":"VP from civic buildings",
+	     "method":"number",
+	     "next":"guildVP"},
+	 "guildVP": {
+	     "description":"VP from guilds",
+	     "method":"number",
+	     "next":"scienceGears"},
+	 "scienceGears": {
+	     "description":"Number of science cards with gears on them",
+	     "method":"number",
+	     "next":"scienceTablet"},
+	 "scienceTablet": {
+	     "description":"Number of science cards with tablets on them",
+	     "method":"number",
+	     "next":"scienceMeasurement"},
+     "scienceMeasurement": {
+	         "description":"Number of science cards with calipers/measurement on them",
+	         "method":"number",
+	         "next":null /*DONE*/}
+    };
+	
+	console.log(SevenWonders.prototype.questions);
+	
 	
 	SevenWonders.prototype.scorePlayer = function(player) {
 	    //  Calculate gold
