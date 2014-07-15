@@ -16,7 +16,7 @@ define("gamescorer", ["require", "7wonders"], function (require, SevenWonders) {
 		// The data will disappear soon
 		var so = this;
 		
-		$("#chooseGame").html("");
+		$("#chooseGame").html('<div data-role="header"><h1>Choose game</h1></div>');
 		
 		for (var idx in games) {
 			console.log(idx);
@@ -25,17 +25,16 @@ define("gamescorer", ["require", "7wonders"], function (require, SevenWonders) {
 			$("#chooseGame").append(newElem);
 
 		}
+		$("#chooseGame").trigger("create");
 		$(".chooseGame").click(function(e) {
 			
 			
 			console.log($(this).data("idx"));
 			var game = so.getScorer($(this).data("idx"));
 			console.log(game);
-			game.setData(data);
-			//game.askPlayers();
+			//game.setData(data);
+			game.showUI();
 			
-			dataout = game.score();
-			game.showScore(dataout);
 		});
 	}
 	

@@ -28,37 +28,44 @@ define("7wonders", ["require","GameCommon"], function (require, GameCommon) {
 	SevenWonders.prototype.questions =
 	{"militaryVP" : {
 	    /* title: if you want to not use the english text */
-	    "description":"VP from Conflict tokens",
+	    "description":"VP from <span style='color:red'>Conflict</span> tokens",
 	    "method":"number",
 	    "next":"gold"},
 	 "gold": {
-	     "description":"Gold from each players treasury",
+	     "description":"<span style='color:DarkGoldenRod'>Gold</span> from each players treasury",
 	     "method":"number",
 	     "next":"wonderVP"},
 	 "wonderVP": {
-	     "description":"VP from constructed Wonders",
+	     "description":"VP from Constructed Wonders",
 	     "method":"number",
 	     "next":"civilianVP"},
 	 "civilianVP": {
-	     "description":"VP from civic buildings",
-	     "method":"number",
-	     "next":"guildVP"},
-	 "guildVP": {
-	     "description":"VP from guilds",
+	     "description":"VP from <span style='color:royalblue'>Civilian</span> buildings",
 	     "method":"number",
 	     "next":"scienceGears"},
 	 "scienceGears": {
-	     "description":"Number of science cards with gears on them",
+	     "description":"Number of <span style='color:green'>Science</span> buildings with gears on them",
 	     "method":"number",
 	     "next":"scienceTablet"},
 	 "scienceTablet": {
-	     "description":"Number of science cards with tablets on them",
+	     "description":"Number of <span style='color:green'>Science</span> buildings with tablets on them",
 	     "method":"number",
 	     "next":"scienceMeasurement"},
      "scienceMeasurement": {
-	         "description":"Number of science cards with calipers/measurement on them",
+	         "description":"Number of <span style='color:green'>Science</span> buildings with calipers/measurement on them",
 	         "method":"number",
-	         "next":null /*DONE*/}
+	         "next":"commercialVP"
+	         },
+	 "commercialVP": {
+		 "description":"VP from <span style='color:orange'>Commercial</span> buildings",
+		 "method":"number",
+	     "next":"guildVP"
+	 },
+	 "guildVP": {
+	     "description":"VP from <span style='color:purple'>Guild</span> buildings",
+	     "method":"number",
+	     /*no next as done*/
+	     },
     };
 	
 	console.log(SevenWonders.prototype.questions);
@@ -109,13 +116,117 @@ define("7wonders", ["require","GameCommon"], function (require, GameCommon) {
 		$.mobile.changePage("#SevenWondersScore_players");
 	}
 	
-	SevenWonders.prototype.showScore = function(data) {
+	SevenWonders.prototype.askQuestion = function(elem) {
+		
+		var so = this;
+		var query = this.questions[elem];
+		var filled = true;
+		
+		/* Check if the element is already filled in */
+		for (var idx in this.data.players) {
+			var item = this.data.players[idx];
+			
+			if (!(elem in item)) {
+				filled = false;
+				break;
+			}
+		}
+			
+		if (filled == false) {
+			console.log("Entering "+elem);
+			var id = SevenWonders.prototype.json_name+"_"+elem;
+			
+			$.mobile.pageContainer.append('<div data-role="page" id="'+id+'">'+
+					'<div data-role="header"><h1>'+so.name+":"+english[elem]+'</h1></div>'+
+					'<div role="main" class="ui-content"><form class="entryPageForm"><h1>'+query.description+'</h1></form></div></div>');
+			
+			if (query.method=="number") {
+				for (var idx in this.data.players) {
+					var item = this.data.players[idx];
+					
+					var value= 0;
+					if (elem in item) {
+						value = item[elem];
+					}
+					
+					$("#"+id+' .entryPageForm').append(
+							'<label for="'+idx+'">'+item["playerName"]+':</label>'+
+							'<input name="'+idx+'" pattern="[0-9]*" min="0" id="number'+idx+'" value="'+value+'" type="number" required>');
+				}
+			}
+
+			$("#"+id+' .entryPageForm').append(
+					'<input value="Submit" type="submit">'
+					)
+					
+			$("#"+id+' .entryPageForm').validate({submitHandler: function(form) {
+					/* Insert data and move to next page */
+					
+					for (var idx in so.data.players) {
+						// This violates id....
+						var newvalue = $("#"+id+" #number"+idx)[0].valueAsNumber;
+						var item = so.data.players[idx];
+						
+						item[elem] = newvalue;
+					}
+					console.log(so.data);
+					so.showUI();
+				}
+			});
+			
+			// Kick jquery mobile to create the relevant magic.
+			$('#'+id).trigger("create");
+			$.mobile.changePage('#'+id);
+			return elem;
+		}
+		
+		// This entry is okay, continue!
+		return query.next;
+		
+	}
+	
+	SevenWonders.prototype.showUI = function() {
+		/* Work out how far along the questions */
+		
+		if (!("players" in this.data)) {
+			// TODO: This will actually ask questions
+			this.data["players"] = [{"playerName":"Player 1"},{"playerName":"Player 2"}];
+		}
+		
+		/* Jump down the decision tree, this may seem inefficient but it may help resume scoring later in development. */
+		var elem = this.questions_start;
+		
+		while (elem) {
+
+
+			var newelem = this.askQuestion(elem);
+			if (newelem == elem) {
+				// we're being displayed
+				break;
+			}
+			
+			if (!newelem) {
+				// No more questions!
+				this.score();
+				this.showScore();
+				break;
+			}
+			
+			elem = newelem;
+		}
+		
+
+	}
+	
+	SevenWonders.prototype.showScore = function() {
 		/* I'm unsure if this should be seperated ala MVC... Will develop and see if it needs refactoring */
 		
 		var displayFields = ["scienceGears", "scienceTablet", "scienceMeasurement", "scienceIdenticalVP", "scienceSetVP",
 		                     "gold","goldVP",
 		                     "wonderVP", "civilianVP", "commercialVP", "guildVP"];
+		var data = this.data;
 		
+		console.log(data);
 		fields = "";
 		for (x in displayFields) {
 			var item = displayFields[x];
