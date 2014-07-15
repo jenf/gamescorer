@@ -6,7 +6,7 @@ define("7wonders", ["require","GameCommon"], function (require, GameCommon) {
 	
 	SevenWonders.prototype = new GameCommon(); 
 	
-	var english = {"militaryVP":"VP from Military",
+	SevenWonders.prototype.english = {"militaryVP":"VP from Military",
 			"goldVP":"VP from Gold",
 			"wonderVP": "VP from wonders",
 			"civilianVP": "VP from civic buildings",
@@ -115,108 +115,7 @@ define("7wonders", ["require","GameCommon"], function (require, GameCommon) {
 		$("#SevenWondersScore_players").trigger("create");
 		$.mobile.changePage("#SevenWondersScore_players");
 	}
-	
-	SevenWonders.prototype.askQuestion = function(elem) {
-		
-		var so = this;
-		var query = this.questions[elem];
-		var filled = true;
-		
-		/* Check if the element is already filled in */
-		for (var idx in this.data.players) {
-			var item = this.data.players[idx];
-			
-			if (!(elem in item)) {
-				filled = false;
-				break;
-			}
-		}
-			
-		if (filled == false) {
-			console.log("Entering "+elem);
-			var id = SevenWonders.prototype.json_name+"_"+elem;
-			
-			$.mobile.pageContainer.append('<div data-role="page" id="'+id+'">'+
-					'<div data-role="header"><h1>'+so.name+":"+english[elem]+'</h1></div>'+
-					'<div role="main" class="ui-content"><form class="entryPageForm"><h1>'+query.description+'</h1></form></div></div>');
-			
-			if (query.method=="number") {
-				for (var idx in this.data.players) {
-					var item = this.data.players[idx];
-					
-					var value= 0;
-					if (elem in item) {
-						value = item[elem];
-					}
-					
-					$("#"+id+' .entryPageForm').append(
-							'<label for="'+idx+'">'+item["playerName"]+':</label>'+
-							'<input name="'+idx+'" pattern="[0-9]*" min="0" id="number'+idx+'" value="'+value+'" type="number" required>');
-				}
-			}
 
-			$("#"+id+' .entryPageForm').append(
-					'<input value="Submit" type="submit">'
-					)
-					
-			$("#"+id+' .entryPageForm').validate({submitHandler: function(form) {
-					/* Insert data and move to next page */
-					
-					for (var idx in so.data.players) {
-						// This violates id....
-						var newvalue = $("#"+id+" #number"+idx)[0].valueAsNumber;
-						var item = so.data.players[idx];
-						
-						item[elem] = newvalue;
-					}
-					console.log(so.data);
-					so.showUI();
-				}
-			});
-			
-			// Kick jquery mobile to create the relevant magic.
-			$('#'+id).trigger("create");
-			$.mobile.changePage('#'+id);
-			return elem;
-		}
-		
-		// This entry is okay, continue!
-		return query.next;
-		
-	}
-	
-	SevenWonders.prototype.showUI = function() {
-		/* Work out how far along the questions */
-		
-		if (!("players" in this.data)) {
-			// TODO: This will actually ask questions
-			this.data["players"] = [{"playerName":"Player 1"},{"playerName":"Player 2"}];
-		}
-		
-		/* Jump down the decision tree, this may seem inefficient but it may help resume scoring later in development. */
-		var elem = this.questions_start;
-		
-		while (elem) {
-
-
-			var newelem = this.askQuestion(elem);
-			if (newelem == elem) {
-				// we're being displayed
-				break;
-			}
-			
-			if (!newelem) {
-				// No more questions!
-				this.score();
-				this.showScore();
-				break;
-			}
-			
-			elem = newelem;
-		}
-		
-
-	}
 	
 	SevenWonders.prototype.showScore = function() {
 		/* I'm unsure if this should be seperated ala MVC... Will develop and see if it needs refactoring */
@@ -230,7 +129,7 @@ define("7wonders", ["require","GameCommon"], function (require, GameCommon) {
 		fields = "";
 		for (x in displayFields) {
 			var item = displayFields[x];
-			var text = english[item];
+			var text = this.english[item];
 			
 			if (vpFields.indexOf(item) == -1) {
 				text = "<i>"+text+"</i>"
